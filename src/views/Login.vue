@@ -9,14 +9,15 @@
             </h2>          
           </v-col>
         </v-row>
-        <v-form v-model="valid">
+        <v-form ref="form">
           <v-row>
             <v-col
               cols="12"
             >
               <v-text-field
-                v-model="username"
+                v-model="form.username"
                 label="Nome do usuário"
+                :rules="usernameRules"
                 required
               ></v-text-field>
             </v-col>
@@ -24,21 +25,35 @@
               cols="12"
             >
             <v-text-field
-              v-model="password"
+              v-model="form.password"
               :append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
               :type="show_password ? 'text' : 'password'"
+              :rules="passwordRules"
               counter
               @click:append="show_password = !show_password"
             ></v-text-field>
             </v-col>
           </v-row>
           <v-row>
-            <v-col>
+            <v-col
+              cols="12"
+            >
               <v-btn
                 depressed
                 color="primary"
+                @click="login"
               >
                 ENTRAR
+              </v-btn>
+            </v-col>
+            <v-col
+              cols="12"
+            >
+              <v-btn
+                depressed
+                @click="goToRegister"
+              >
+                CADASTRE-SE
               </v-btn>
             </v-col>
           </v-row>
@@ -49,47 +64,57 @@
 </template>
 
 <script>
-import { required, email } from "@vuelidate/validators";
-
 import UsersModel from "@/models/UserModel";
 
 export default {
   data() {
     return {
       form: {
-        email: "",
+        username: "",
         password: "",
-      }
+      },
+      show_password: false,
     }
+  },
+
+  computed: {
+    usernameRules() {
+      return [
+        v => !!v || 'Username required',
+      ]
+    },  
+    passwordRules(){
+      return [
+        v => !!v || 'Password required',
+      ]
+    },
   },
 
   methods: {
     async login() {
-      this.$vuetify.$touch();
-      if (this.$vuetify.$error) {
-        return;
+      const validation = await this.$refs.form.validate();
+      if (validation.valid) {
+        let user = await UsersModel.params({ email: this.form.username, password: this.form.password }).get();
+
+        if (!user || !user[0] || !user[0].username){
+          this.$toast.show(`WRONG USERNAME OR PASSWORD`, {
+            type: 'error',
+            position: 'top'
+          });
+          return;
+        }
+
+        localStorage.setItem('authUser', JSON.stringify(user));
+        this.$router.push({ name: 'home' })
       }
-
-      let user = await UserModel.params({ email: this.form.email }).get();
-
-      if (!user || !user[0] || !user[0].email){
-        return;
-      }
-
-      localStorage.setItem('authUser', JSON.stringify(user));
-      this.$router.push({ name: 'home' })
-    }
-  },  
-
-  validators: {
-    form: {
-      email: {
-        required,
-        email,
-      }
+      return;
+    },
+    goToRegister() {
+      this.$router.push({ name: 'register'});
     }
   }
 }
+
 
 </script>
   
