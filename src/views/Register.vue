@@ -9,7 +9,7 @@
             </h2>          
           </v-col>
         </v-row>
-        <v-form ref="form" v-model="valid">
+        <v-form ref="form">
           <v-row>
             <v-col
               cols="12"
