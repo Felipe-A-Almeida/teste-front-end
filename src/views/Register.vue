@@ -9,7 +9,7 @@
             </h2>          
           </v-col>
         </v-row>
-        <v-form v-model="valid">
+        <v-form ref="form" v-model="valid">
           <v-row>
             <v-col
               cols="12"
@@ -17,6 +17,7 @@
               <v-text-field
                 v-model="form.username"
                 label="Nome do usuário"
+                :rules="usernameRules"
                 required
               ></v-text-field>
             </v-col>
@@ -25,26 +26,41 @@
             >
               <v-text-field
                 v-model="form.password"
-                counter
+                type="password"
+                required
+                :rules="passwordRules"
               ></v-text-field>
             </v-col>
             <v-col
               cols="12"
             >
               <v-text-field
-                v-model="form.confirm_password"
-                counter
+                v-model="confirm_password"
+                type="password"
+                required
               ></v-text-field>
             </v-col>
           </v-row>
           <v-row>
-            <v-col>
+            <v-col
+              cols="12"
+            >
               <v-btn
                 depressed
                 color="primary"
                 @click="register"
               >
                 CADASTRAR
+              </v-btn>
+            </v-col>
+            <v-col
+              cols="12"
+            >
+              <v-btn
+                depressed
+                @click="goToLogin"
+              >
+                VOLTAR
               </v-btn>
             </v-col>
           </v-row>
@@ -55,45 +71,54 @@
 </template>
 
 <script>
-  import { required, minLength, sameAs } from "@vuelidate/validators";
-
   import UsersModel from "@/models/UserModel";
 
   export default {
-    data() {
+    data: () => {
       return {
         form: {
           username: "",
           password: "",
-          confirm_password: "",
         },
+        confirm_password: "",
+        confirmationPasswordRules: [],
         valid: true,
       }
     },
 
+    computed: {
+      usernameRules() {
+        return [
+          v => !!v || 'Username required',
+        ]
+      },  
+      passwordRules(){
+        return [
+          v => !!v || 'Password required',
+          v => v.length >= 6 || 'Password must contain at least 6 characters'
+        ]
+      },
+    },
+    
+
     methods: {
-      register() {
-        const UserModel = new UsersModel(this.form);
-        UserModel.save();
+      async register() {
+        const validation = await this.$refs.form.validate();
+        if (validation.valid) {
+          if (this.form.password !== this.confirm_password){
+            this.$toast.show(`PASSWORDS MUST MATCH!`, {
+              type: 'error',
+              position: 'top'
+            });
+            return;
+          }
+          const UserModel = new UsersModel(this.form);
+          UserModel.save();
+        }
+      },
+      goToLogin() {
+        this.$router.push({ name: 'login'});
       }
     },
-
-    validations: {
-      form: {
-        username: {
-          required,
-        },
-
-        password: {
-          required,
-          minLength: minLength(6)
-        },
-
-        confirm_password: {
-          required,
-          sameAsPassword: sameAs('password')
-        }
-      }
-    }
   }
 </script>
