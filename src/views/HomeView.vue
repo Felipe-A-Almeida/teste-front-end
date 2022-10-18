@@ -2,9 +2,15 @@
   <div>
     <Header></Header>
     <v-container>
-      <SearchBox
-        @setVideoList="setVideoList"
-      />
+      <v-row
+        class="mt-5"
+      >
+        <v-col>
+          <SearchBox
+            @setVideoList="setVideoList"
+          />
+        </v-col>
+      </v-row>
       <v-divider></v-divider>
       <v-row
         v-if="!video_detail"

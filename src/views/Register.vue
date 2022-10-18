@@ -43,8 +43,8 @@
                   class="d-flex justify-center"
                 >
                   <v-btn
+                    class="background-primary"
                     depressed
-                    color="primary"
                     @click="register"
                   >
                     CADASTRAR
