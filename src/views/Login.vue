@@ -44,7 +44,7 @@
                 >
                   <v-btn
                     depressed
-                    color="primary"
+                    class="background-primary"
                     @click="login"
                   >
                     ENTRAR
