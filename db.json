@@ -1,15 +1,9 @@
 {
   "users": [
     {
-      "id": 1,
-      "username": "teste1",
-      "password": "12345"
-    },
-    {
-      "username": "teste 2",
-      "password": "123456",
-      "confirm_password": "123456",
-      "id": 2
+      "username": "user1",
+      "email": "user1@hotmail.com",
+      "id": 1
     }
   ]
 }
