@@ -1,0 +1,20 @@
+.header-card{
+  padding: 3% 5% 3% 5% !important;
+  background-color: beige !important;
+}
+.text-align-right{
+  text-align: right;
+}
+.text-align-center{
+  text-align: center;
+}
+.float-right{
+  float: right;
+}
+.video-iframe{
+  min-width: 100%;
+  min-height: 500px;
+}
+.pointer{
+  cursor: pointer;
+}
