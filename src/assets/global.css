@@ -18,3 +18,7 @@
 .pointer{
   cursor: pointer;
 }
+.login-form{
+  width: inherit;
+  max-width: 650px;
+}

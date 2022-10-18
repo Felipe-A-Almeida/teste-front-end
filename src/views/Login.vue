@@ -1,63 +1,73 @@
 <template>
   <v-container>
     <v-row>
-      <v-col>      
+      <v-col>
+        <Logo 
+          :url="require('../assets/logo.png')"
+          height="200"
+        />    
         <v-row>
-          <v-col>
-            <h2>
-              LOGO
-            </h2>          
+          <v-col
+            class="d-flex justify-center"
+          >
+            <v-form 
+              ref="form"
+              class="login-form"
+            >
+              <v-row
+                class="d-flex justify-center"
+              >
+                <v-col
+                  cols="12"
+                >
+                  <v-text-field
+                    v-model="form.username"
+                    label="Nome do usuário"
+                    :rules="usernameRules"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col
+                  cols="12"
+                >
+                <v-text-field
+                  v-model="form.password"
+                  :append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
+                  :type="show_password ? 'text' : 'password'"
+                  :rules="passwordRules"
+                  counter
+                  @click:append="show_password = !show_password"
+                ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col
+                  cols="12"
+                  class="d-flex justify-center"
+                >
+                  <v-btn
+                    depressed
+                    color="primary"
+                    @click="login"
+                  >
+                    ENTRAR
+                  </v-btn>
+                </v-col>
+                <v-col
+                  cols="12"
+                  class="d-flex justify-center"
+                >
+                  <v-btn
+                    depressed
+                    @click="goToRegister"
+                  >
+                    CADASTRE-SE
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-form>
           </v-col>
         </v-row>
-        <v-form ref="form">
-          <v-row>
-            <v-col
-              cols="12"
-            >
-              <v-text-field
-                v-model="form.username"
-                label="Nome do usuário"
-                :rules="usernameRules"
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col
-              cols="12"
-            >
-            <v-text-field
-              v-model="form.password"
-              :append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
-              :type="show_password ? 'text' : 'password'"
-              :rules="passwordRules"
-              counter
-              @click:append="show_password = !show_password"
-            ></v-text-field>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col
-              cols="12"
-            >
-              <v-btn
-                depressed
-                color="primary"
-                @click="login"
-              >
-                ENTRAR
-              </v-btn>
-            </v-col>
-            <v-col
-              cols="12"
-            >
-              <v-btn
-                depressed
-                @click="goToRegister"
-              >
-                CADASTRE-SE
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-form>
       </v-col>
     </v-row>
   </v-container>
@@ -65,8 +75,14 @@
 
 <script>
 import UsersModel from "@/models/UserModel";
+import Logo from "@/components/Logo";
 
 export default {
+
+  components: {
+    Logo
+  },
+  
   data() {
     return {
       form: {
