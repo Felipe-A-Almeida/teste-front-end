@@ -12,7 +12,7 @@
           >
             <v-form 
               ref="form"
-              class="login-form"
+              class="sign-form"
             >
               <v-row
                 class="d-flex justify-center"
