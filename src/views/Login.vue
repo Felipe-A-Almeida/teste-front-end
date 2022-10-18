@@ -31,12 +31,9 @@
                   cols="12"
                 >
                 <v-text-field
-                  v-model="form.password"
-                  :append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
-                  :type="show_password ? 'text' : 'password'"
-                  :rules="passwordRules"
-                  counter
-                  @click:append="show_password = !show_password"
+                  v-model="form.email"
+                  label="E-mail"
+                  :rules="emailRules"
                 ></v-text-field>
                 </v-col>
               </v-row>
@@ -87,21 +84,20 @@ export default {
     return {
       form: {
         username: "",
-        password: "",
+        email: "",
       },
-      show_password: false,
     }
   },
 
   computed: {
     usernameRules() {
       return [
-        v => !!v || 'Username required',
+        v => !!v || 'Por favor, preencha seu nome de usuário.',
       ]
     },  
-    passwordRules(){
+    emailRules(){
       return [
-        v => !!v || 'Password required',
+        v => !!v || 'Por favor, preencha seu e-mail.',
       ]
     },
   },
@@ -110,10 +106,10 @@ export default {
     async login() {
       const validation = await this.$refs.form.validate();
       if (validation.valid) {
-        let user = await UsersModel.params({ email: this.form.username, password: this.form.password }).get();
+        let user = await UsersModel.params({ email: this.form.username, email: this.form.email }).get();
 
         if (!user || !user[0] || !user[0].username){
-          this.$toast.show(`WRONG USERNAME OR PASSWORD`, {
+          this.$toast.show(`Nome de usuário ou e-mail errados.`, {
             type: 'error',
             position: 'top'
           });

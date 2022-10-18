@@ -92,12 +92,12 @@
     computed: {
       usernameRules() {
         return [
-          v => !!v || 'Por favor, preencha seu nome de usuário',
+          v => !!v || 'Por favor, preencha seu nome de usuário.',
         ]
       },  
       emailRules(){
         return [
-          v => !!v || 'Por favor, preencha seu e-mail',
+          v => !!v || 'Por favor, preencha seu e-mail.',
           v => String(v)
                 .toLowerCase()
                 .match(
