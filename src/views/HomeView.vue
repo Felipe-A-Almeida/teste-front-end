@@ -3,15 +3,45 @@
     <Header></Header>
     <v-container>
       <v-row
-        class="mt-5"
+        :class="`mt-5 search-box-row ${ video_list.length > 0 || error ? 'slide-top' : 'abc' }`"
+        align="center"
+        justify="center"        
       >
         <v-col>
           <SearchBox
+            :video_id="video_id"
             @setVideoList="setVideoList"
+            @show-loading="showLoading"
           />
         </v-col>
       </v-row>
-      <v-divider></v-divider>
+      <v-row
+        v-if="error"
+      >
+        <v-col
+          cols="12"
+          class="d-flex justify-center slide-top"
+        >
+          <p>
+            <h3>
+              Não encontramos vídeos com o termo buscado.
+            </h3>
+          </p>
+        </v-col>
+        <v-col
+          cols="12"
+          class="d-flex justify-center slide-top"
+        >
+          <p>
+            <h4>
+              Utilize outras palavras-chaves
+            </h4>
+          </p>
+        </v-col>
+      </v-row>
+      <v-divider 
+        v-if="video_list.length > 0"
+      />
       <v-row
         v-if="!video_detail"
       >
@@ -50,6 +80,20 @@
               </v-btn>
             </v-card-actions>
           </v-card>
+        </v-col>
+      </v-row>
+      <v-row
+        v-if="loading_video"
+      >
+        <v-col
+          class="d-flex justify-center"
+        >
+          <v-progress-circular
+            indeterminate
+            color="#90caf991"
+            :size="70"
+            :width="7"
+          ></v-progress-circular>
         </v-col>
       </v-row>
       <div
@@ -171,12 +215,20 @@ export default defineComponent({
       api_key: "AIzaSyD04dlDjG532FMvw7WDJzAc-HzwpDl4byo",
       video_list: [],
       video_detail: null,
+      loading_video: false,
+      error: null,
     }
   },
 
   methods: {
     setVideoList(videos) {
-      this.video_list = videos;
+      if (videos.length === 0 || videos.error){
+        this.error = true;
+      }
+      this.video
+      videos.forEach((video) => {
+        this.video_list.push(video);
+      })
     },
     async setVideoDetail() {
       let response = await fetch(`https://www.googleapis.com/youtube/v3/videos?id=${this.video_id}&part=snippet,statistics&key=${this.api_key}`, {
@@ -193,8 +245,45 @@ export default defineComponent({
       this.setVideoDetail();
     },
     hideVideoDetails() {
-      this.video_detail = null
+      this.video_detail = null;
+      this.video_id = null;
+    },
+    showLoading(status) {
+      this.loading_video = status;
     }
   }
 });
 </script>
+
+<style>
+
+  @-webkit-keyframes slide-top {
+    0% {
+      -webkit-transform: translateY(0);
+              transform: translateY(0);
+    }
+    100% {
+      -webkit-transform: translateY(-25vh);
+              transform: translateY(-25vh);
+    }
+  }
+  @keyframes slide-top {
+    0% {
+      -webkit-transform: translateY(0);
+              transform: translateY(0);
+    }
+    100% {
+      -webkit-transform: translateY(-25vh);
+              transform: translateY(-25vh);
+    }
+  }
+
+  .search-box-row{
+    height: 60vh;
+  }
+
+  .slide-top{
+    -webkit-animation: slide-top 0.5s linear both;
+    animation: slide-top 0.5s linear both;
+  }
+</style>
