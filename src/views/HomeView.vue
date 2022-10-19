@@ -3,7 +3,7 @@
     <Header></Header>
     <v-container>
       <v-row
-        :class="`mt-5 search-box-row ${ video_list.length > 0 || error ? 'slide-top' : 'abc' }`"
+        :class="`mt-5 search-box-row ${ video_list.length > 0 || error ? 'slide-top' : '' }`"
         align="center"
         justify="center"        
       >
@@ -12,6 +12,7 @@
             :video_id="video_id"
             @setVideoList="setVideoList"
             @show-loading="showLoading"
+            @clear-videos="clearVideos"
           />
         </v-col>
       </v-row>
@@ -39,11 +40,9 @@
           </p>
         </v-col>
       </v-row>
-      <v-divider 
-        v-if="video_list.length > 0"
-      />
       <v-row
         v-if="!video_detail"
+        :class="`${ video_list.length > 0 ? 'video-slide-top' : '' }`"
       >
         <v-col
           v-for="(video, video_index) in video_list"
@@ -98,7 +97,7 @@
       </v-row>
       <div
         v-if="video_detail"
-        class="mt-5"
+        :class="`${ video_detail ? 'video-slide-top' : '' }`"
       >     
         <v-row
           class="pb-5"
@@ -227,7 +226,9 @@ export default defineComponent({
       }
       this.video
       videos.forEach((video) => {
-        this.video_list.push(video);
+        if (!(this.video_list.find((selected_video) => selected_video.id.videoId === video.id.videoId))){
+          this.video_list.push(video);
+        }
       })
     },
     async setVideoDetail() {
@@ -250,40 +251,10 @@ export default defineComponent({
     },
     showLoading(status) {
       this.loading_video = status;
+    },
+    clearVideos(){
+      this.video_list = [];
     }
   }
 });
 </script>
-
-<style>
-
-  @-webkit-keyframes slide-top {
-    0% {
-      -webkit-transform: translateY(0);
-              transform: translateY(0);
-    }
-    100% {
-      -webkit-transform: translateY(-25vh);
-              transform: translateY(-25vh);
-    }
-  }
-  @keyframes slide-top {
-    0% {
-      -webkit-transform: translateY(0);
-              transform: translateY(0);
-    }
-    100% {
-      -webkit-transform: translateY(-25vh);
-              transform: translateY(-25vh);
-    }
-  }
-
-  .search-box-row{
-    height: 60vh;
-  }
-
-  .slide-top{
-    -webkit-animation: slide-top 0.5s linear both;
-    animation: slide-top 0.5s linear both;
-  }
-</style>

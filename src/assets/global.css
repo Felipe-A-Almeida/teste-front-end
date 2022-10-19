@@ -27,3 +27,61 @@
   color: #5a5a5a !important;
   font-weight: bolder !important;
 }
+
+/*==============ANIMATIONS===============*/
+
+@-webkit-keyframes slide-top {
+  0% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
+  100% {
+    -webkit-transform: translateY(-25vh);
+            transform: translateY(-25vh);
+  }
+}
+@keyframes slide-top {
+  0% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
+  100% {
+    -webkit-transform: translateY(-25vh);
+            transform: translateY(-25vh);
+  }
+}
+
+@-webkit-keyframes video-slide-top {
+  0% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
+  100% {
+    -webkit-transform: translateY(-45vh);
+            transform: translateY(-45vh);
+  }
+}
+@keyframes video-slide-top {
+  0% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
+  100% {
+    -webkit-transform: translateY(-45vh);
+            transform: translateY(-45vh);
+  }
+}
+
+.search-box-row{
+  height: 60vh;
+}
+
+.slide-top{
+  -webkit-animation: slide-top 0.5s linear both;
+  animation: slide-top 0.5s linear both;
+}
+
+.video-slide-top{
+  -webkit-animation: video-slide-top 0.5s linear both;
+  animation: video-slide-top 0.5s linear both;
+}
