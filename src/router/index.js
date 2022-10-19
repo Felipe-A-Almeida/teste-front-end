@@ -28,12 +28,18 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: Login
+    component: Login,
+    meta: {
+     hasAuth: true,
+    }
   },
   {
     path: '/register',
     name: 'register',
-    component: Register
+    component: Register,
+    meta: {
+      hasAuth: true,
+    }
   },
 ]
 
@@ -53,7 +59,18 @@ router.beforeEach((to, from, next) => {
       next();
     }
   } else {
-    next();
+    if (to.matched.some((record) => record.meta.hasAuth)) {
+      if (localStorage.getItem("authUser") != null) {
+        next({
+          path: "/home",
+          params: { nextUrl: to.fullPath },
+        });
+      } else {
+        next();
+      }
+    } else {
+      next();
+    }
   }
 })
 
