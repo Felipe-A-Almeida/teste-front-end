@@ -6,7 +6,7 @@ import Register from '../views/Register.vue';
 const routes = [
   {
     path: '/',
-    name: 'home',
+    name: 'index',
     component: Login,
     meta: {
       hasAuth: true,
